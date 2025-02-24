@@ -17,6 +17,10 @@ The product is a digital photo frame that requires below components:
 - 3 toggle switch (Low Medium High) settings for the LED.
 - Height of components to not exceed LED to allow for picture frame plate / encasing to sit flush. LCD selection has to be done very carefully so as to not expose it too much from the frame.
 
+### PCB Concept Image
+![image](https://github.com/user-attachments/assets/c5a51ce5-0a3a-4a6a-ab57-31fe92575a9f)
+
+
 ### Firmware Requirements
 - Some features outlined in **Hardware Requirements** section.
 - The text strings should vertically scroll on the screen on repeat with a short interval (around 2 seconds).
