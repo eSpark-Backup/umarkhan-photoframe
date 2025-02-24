@@ -10,7 +10,7 @@ The product is a digital photo frame that requires below components:
     - Programmable/Addressable - Dimmable, On/Off
     - 4 colours minimum - Red, Green, Blue, Yellow
 - A small LCD screen preferably **101.6mm x 76.2mm** which show the data provided by the GET response around 3/4 rows of text at one time.
-- **Desired Dimensions: 841mm x 594mm**. Enclosed in a Wooden Frame.
+- **Desired Dimensions: 704mm x 370mm**. Enclosed in a Wooden Frame.
 - Wi-Fi connectivity: The electronics needs to be able to connect to the users WiFi.
 - Powered by USBC adaptor.
 - On/Off switch.
