@@ -29,4 +29,8 @@ The product is a digital photo frame that requires below components:
 - Scheduled on/off by settings (based on timing the user can set) through a hosted Webpage.
 - Offline mode: When there's no Wi-Fi connection, the device should run a pre-programmed sequence similar to the API response (to be provided later).
 - LCD Screen on the bottom should always show the current time and timezone - automatically picked up. Or configurable by the user by webpage similar to the wifi settings.
-- Device connect to WiFi Gateway via details entered by user on locally hosted webpage. 
+- Device connect to WiFi Gateway via details entered by user on locally hosted webpage.
+
+#### Segment breakdown for firmware
+![image](https://github.com/user-attachments/assets/7ef58133-c70f-4ebf-a95f-cb740727939c)
+
