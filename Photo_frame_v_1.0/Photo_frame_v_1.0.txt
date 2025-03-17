@@ -1,16 +1,17 @@
 Board Information Report
 Filename     : S:\umarkhan-photoframe\Photo_frame_v_1.0\Photo_frame_v_1.0.PcbDoc
-Date         : 3/14/2025
-Time         : 1:47:23 PM
-Time Elapsed : 00:00:01
+Date         : 3/17/2025
+Time         : 1:24:16 PM
+Time Elapsed : 00:00:00
 
 Routing Information
-    Routing completion, 41.94%
+    Routing completion, 66.88%
     Connections, 782
-    Connections routed, 328
-    Connections remaining, 454
+    Connections routed, 523
+    Connections remaining, 259
 count : 4
 
 Net Track Width, Count
-    10mils, 231
-count : 1
+    8mils, 229
+    10mils, 2
+count : 2
