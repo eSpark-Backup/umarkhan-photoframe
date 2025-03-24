@@ -1,11 +1,13 @@
-Output: Generates pick and place files
-Type  : Pick Place
-From  : Variant [[No Variations]] of Project [Photo_frame_v_1.0.PrjPcb]
-   Generated File[Pick Place for Photo_frame_v_1.0.txt]
-   Generated File[Pick Place for Photo_frame_v_1.0.csv]
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [Photo_frame_v_1.0.PrjPcb]
+   Generated File[Photo_frame_v_1.0-RoundHoles.TXT]
+   Generated File[Photo_frame_v_1.0-SlotHoles.TXT]
+   Generated File[Photo_frame_v_1.0.LDP]
+   Generated File[Photo_frame_v_1.0.DRR]
 
 
-Files Generated   : 2
+Files Generated   : 4
 Documents Printed : 0
 
-Finished Output Generation At 8:39:21 AM On 3/20/2025
+Finished Output Generation At 1:38:35 PM On 3/24/2025
