@@ -23,6 +23,7 @@ void loadHTMLFiles() {
     file = SPIFFS.open("/wifi_success.html", "r");
     if (file) {
         successPage = file.readString();
+        Serial.println("Successfully to open file!");
         file.close();
     } else {
         Serial.println("Failed to open Wi-Fi success HTML file.");
