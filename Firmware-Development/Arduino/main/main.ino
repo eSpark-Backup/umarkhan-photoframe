@@ -3,6 +3,7 @@
 #include "SPIFFHandler.hpp"
 #include "WebServerHandler.hpp"
 #include "WifiMonitoring.hpp"
+#include "httpClient.hpp"
 
 const int LED_PIN = 2;
 
@@ -19,7 +20,8 @@ void setup() {
     }
    // WebServer
     // Set LED pin as output
-    pinMode(LED_PIN, OUTPUT);    
+    pinMode(LED_PIN, OUTPUT);
+    begin();    
 }
 
 void loop() {
@@ -27,5 +29,6 @@ void loop() {
     delay(100);
     wifiMonitoring();
     checkLEDStatus();
+    makeRequest("https://api-database-updater.ftled.workers.dev/");
 
 }
