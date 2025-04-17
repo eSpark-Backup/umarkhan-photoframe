@@ -15,6 +15,7 @@
 
 extern WebServer server;
 extern Preferences preferences;
+// const char* htmlForm;
 
 void setupWiFi();
 void handleRoot();
@@ -24,4 +25,6 @@ void setupWebServer();
 void createTask();
 void startAccessPoint();
 void attemptWifiReconnect();
+void checkLEDStatus();
+
 #endif

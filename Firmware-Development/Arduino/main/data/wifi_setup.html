@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wi-Fi Setup and Device Configuration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input[type="text"], input[type="password"], input[type="datetime-local"], input[type="time"] {
+      width: 30%;
+      padding: 10px;
+      margin: 10px 0;
+      display: block;
+    }
+    input[type="submit"], .button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover, .button:hover {
+      background-color: #45a049;
+    }
+    #notification {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: none;
+      z-index: 1000;
+    }
+  </style>
+  <script>
+    function showNotification(message, color) {
+      var notification = document.getElementById("notification");
+      notification.innerHTML = message;
+      notification.style.backgroundColor = color;
+      notification.style.display = "block";
+
+      setTimeout(function() {
+        notification.style.display = "none";
+      }, 20000);
+    }
+
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get("status");
+    if (status === "connected") {
+      showNotification("Wi-Fi Connected Successfully!", "#4CAF50");
+    } else if (status === "failed") {
+      showNotification("Wi-Fi Connection Failed. Please try again.", "#f44336");
+    } else if (status === "timesync_success") {
+      showNotification("System Time Updated!!", "#4CAF50");
+    } else if (status === "timesync_failed") {
+      showNotification("Failed to Sync Date & Time.", "#f44336");
+    } else if (status === "No timesync") {
+      showNotification("No DateTime Provided.", "#f44336");
+    } else if (status === "schedule_success") {
+      showNotification(" LED Time Schedule Updated Successfully!", "#4CAF50");
+    } else if (status === "schedule_failed") {
+      showNotification("Failed to Update LED Time Schedule.", "#f44336");
+    }
+    };
+  </script>
+</head>
+<body>
+
+  <div id="notification"></div>
+
+  <h2>Wi-Fi Setup</h2>
+  <form action="/connect" method="POST">
+    <label for="ssid">SSID:</label><br>
+    <input type="text" id="ssid" name="ssid" required><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br>
+
+    <input type="submit" value="Connect">
+  </form>
+
+  <h2>Device Configuration</h2>
+
+  <!-- Date and Time Sync -->
+  <form action="/sync_time" method="POST">
+    <label for="datetime">Current Date and Time:</label><br>
+    <input type="datetime-local" id="datetime" name="datetime" required><br>
+    <input type="submit" value="Sync Date & Time">
+  </form>
+
+  <br><hr><br>
+
+  <!-- Schedule Setting -->
+  <form action="/upload_schedule" method="POST">
+    <label for="onTime">ON Time:</label><br>
+    <input type="time" id="onTime" name="onTime" required><br>
+
+    <label for="offTime">OFF Time:</label><br>
+    <input type="time" id="offTime" name="offTime" required><br>
+
+    <input type="submit" value="Upload Schedule">
+  </form>
+
+</body>
+</html>

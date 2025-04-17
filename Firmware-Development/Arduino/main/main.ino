@@ -26,5 +26,6 @@ void loop() {
     // server.handleClient();
     delay(100);
     wifiMonitoring();
+    checkLEDStatus();
 
 }
