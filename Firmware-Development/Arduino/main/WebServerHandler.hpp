@@ -16,6 +16,7 @@
 extern WebServer server;
 extern Preferences preferences;
 // const char* htmlForm;
+extern bool ledState;
 
 void setupWiFi();
 void handleRoot();

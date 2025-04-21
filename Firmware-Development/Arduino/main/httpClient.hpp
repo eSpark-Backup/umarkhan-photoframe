@@ -6,7 +6,16 @@
 #include <HTTPClient.h>
 #include <NetworkClientSecure.h>
 
-    void begin();
+#define NUM_SEGMENTS  23
+
+struct SegmentControl {
+  uint8_t percentageComplete;  // 0-100
+  bool isInverted;
+};
+
+extern SegmentControl segmentControls[NUM_SEGMENTS];
+
+    void httpsClock();
     void makeRequest(const char* url);
     void setClock();
     

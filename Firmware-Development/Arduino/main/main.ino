@@ -4,8 +4,9 @@
 #include "WebServerHandler.hpp"
 #include "WifiMonitoring.hpp"
 #include "httpClient.hpp"
+#include "LED.hpp"
 
-const int LED_PIN = 2;
+// const int LED_PIN = 2;
 
 void setup() {
     Serial.begin(115200);
@@ -20,8 +21,9 @@ void setup() {
     }
    // WebServer
     // Set LED pin as output
-    pinMode(LED_PIN, OUTPUT);
-    begin();    
+    // pinMode(LED_PIN, OUTPUT);
+    httpsClock(); 
+    ledSetup();   
 }
 
 void loop() {
@@ -30,5 +32,5 @@ void loop() {
     wifiMonitoring();
     checkLEDStatus();
     makeRequest("https://api-database-updater.ftled.workers.dev/");
-
+    runSegments();
 }

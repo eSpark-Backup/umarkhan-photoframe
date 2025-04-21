@@ -5,12 +5,13 @@
 #include <time.h>
 #include <sys/time.h>
 
-const int LED_PIN = 2;  // Built-in LED pin
+// const int LED_PIN = 2;  // Built-in LED pin
 
 WebServer server(80);
 Preferences preferences;
 
-// For Scheduled LED ON/OFF
+ bool ledState = false;
+
 struct Schedule {
   int onHour;
   int onMinute;
@@ -19,7 +20,6 @@ struct Schedule {
 };
 Schedule ledSchedule = {0, 0, 0, 0};
 
-bool ledState = false;
 
 void webServerTask(void* pvParameters);
 
@@ -123,13 +123,13 @@ void checkLEDStatus() {
   int currentMinute = timeinfo.tm_min;
 
   if (currentHour == ledSchedule.onHour && currentMinute == ledSchedule.onMinute && !ledState) {
-    digitalWrite(LED_PIN, HIGH);
+    // digitalWrite(LED_PIN, HIGH);
     ledState = true;
     Serial.println("LED Turned ON (Scheduled)");
   }
 
   if (currentHour == ledSchedule.offHour && currentMinute == ledSchedule.offMinute && ledState) {
-    digitalWrite(LED_PIN, LOW);
+    // digitalWrite(LED_PIN, LOW);
     ledState = false;
     Serial.println("LED Turned OFF (Scheduled)");
   }
