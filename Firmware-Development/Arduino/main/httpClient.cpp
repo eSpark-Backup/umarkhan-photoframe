@@ -5,6 +5,9 @@
 
 NetworkClientSecure* client = new NetworkClientSecure;
 SegmentControl segmentControls[NUM_SEGMENTS];
+unsigned long previousMillis = 0;
+
+
 
 const char* rootCACertificate = R"EOF(
 -----BEGIN CERTIFICATE-----
@@ -88,32 +91,38 @@ void fetchSegmentsFromPayload(const String& payload) {
   }
 }
 
-void makeRequest(const char* url) {
-  if (client) {
-    client->setCACert(rootCACertificate);
-    HTTPClient https;
+void makeRequest() {
+  unsigned long currentMillis = millis();
 
-    Serial.print("[HTTPS] begin...\n");
-    if (https.begin(*client, url)) {
-      Serial.print("[HTTPS] GET...\n");
-      int httpCode = https.GET();
+  if (currentMillis - previousMillis >= (interval * 60000)) {
+    previousMillis = currentMillis;
 
-      if (httpCode > 0) {
-        Serial.printf("[HTTPS] GET... code: %d\n", httpCode);
-        if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-          String payload = https.getString();
-          Serial.println(payload);
-          fetchSegmentsFromPayload(payload);
+    if (client) {
+      client->setCACert(rootCACertificate);
+      HTTPClient https;
+
+      Serial.print("[HTTPS] begin...\n");
+      if (https.begin(*client, URL)) {
+        Serial.print("[HTTPS] GET...\n");
+        int httpCode = https.GET();
+
+        if (httpCode > 0) {
+          Serial.printf("[HTTPS] GET... code: %d\n", httpCode);
+          if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
+            String payload = https.getString();
+            Serial.println(payload);
+            fetchSegmentsFromPayload(payload);
+          }
+        } else {
+          Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
         }
-      } else {
-        Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
-      }
 
-      https.end();
+        https.end();
+      } else {
+        Serial.printf("[HTTPS] Unable to connect\n");
+      }
     } else {
-      Serial.printf("[HTTPS] Unable to connect\n");
+      Serial.println("Unable to create client");
     }
-  } else {
-    Serial.println("Unable to create client");
   }
 }

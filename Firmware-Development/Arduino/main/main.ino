@@ -31,6 +31,6 @@ void loop() {
     delay(100);
     wifiMonitoring();
     checkLEDStatus();
-    makeRequest("https://api-database-updater.ftled.workers.dev/");
+    makeRequest();
     runSegments();
 }
