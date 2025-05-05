@@ -7,12 +7,12 @@
 #include <NetworkClientSecure.h>
 
 #define NUM_SEGMENTS  23
-
+#define INTERVAL_MIN 1
 // const char* URL = "https://api-database-updater.ftled.workers.dev/" ;
 
 static const char* URL = "https://api-database-updater.ftled.workers.dev/" ;
 
-const unsigned long interval = 1; // 60,000 milliseconds = 1 minute
+const unsigned long interval = INTERVAL_MIN; // 60,000 milliseconds = 1 minute
 
 struct SegmentControl {
   uint8_t percentageComplete;  // 0-100
@@ -21,9 +21,18 @@ struct SegmentControl {
 
 extern SegmentControl segmentControls[NUM_SEGMENTS];
 
-    void httpsClock();
-    void makeRequest();
-    void setClock();
+
+class HttpClient{
+
+  public:
+      void httpsClock();
+      void makeRequest();
+      void setClock();
+
+  private:
+      void fetchSegmentsFromPayload(const String& payload);
     
-    
+};
+
+
 #endif // HTTPSCLIENT_HPP

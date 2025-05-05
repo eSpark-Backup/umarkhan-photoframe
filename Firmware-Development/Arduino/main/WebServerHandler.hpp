@@ -18,14 +18,22 @@ extern Preferences preferences;
 // const char* htmlForm;
 extern bool ledState;
 
-void setupWiFi();
-void handleRoot();
-void handleConnect();
-void handleLEDControl();
-void setupWebServer();
-void createTask();
-void startAccessPoint();
-void attemptWifiReconnect();
-void checkLEDStatus();
+
+class WebServerHandler{
+
+    public:
+        void setupWiFi();
+        void createTask();
+        void checkLEDStatus();
+
+    private:
+        void startAccessPoint();
+
+
+
+        // void handleLEDControl();
+        // void attemptWifiReconnect();
+
+};
 
 #endif

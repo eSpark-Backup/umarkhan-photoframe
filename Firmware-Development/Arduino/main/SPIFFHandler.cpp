@@ -3,7 +3,7 @@
 String htmlForm;
 String successPage;
 
-bool initSPIFFS() {
+bool SPIFFHandler::initSPIFFS() {
     if (!SPIFFS.begin()) {
         Serial.println("SPIFFS Mount Failed");
         return false;
@@ -11,7 +11,7 @@ bool initSPIFFS() {
     return true;
 }
 
-void loadHTMLFiles() {
+void SPIFFHandler::loadHTMLFiles() {
     File file = SPIFFS.open("/wifi_setup.html", "r");
     if (file) {
         htmlForm = file.readString();

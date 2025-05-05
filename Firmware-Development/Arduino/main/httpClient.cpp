@@ -1,4 +1,4 @@
-#include "httpClient.hpp"
+#include "HttpClient.hpp"
 #include <time.h>
 #include <ArduinoJson.h>
 
@@ -33,65 +33,65 @@ vepuoxtGzi4CZ68zJpiq1UvSqTbFJjtbD4seiMHl
 -----END CERTIFICATE-----
 )EOF";
 
-void httpsClock() {
+void HttpClient::httpsClock() {
   setClock();
 }
 
-void setClock() {
-  configTime(0, 0, "pool.ntp.org");
+void HttpClient::setClock() {
+      configTime(0, 0, "pool.ntp.org");
 
-  Serial.print(F("Waiting for NTP time sync: "));
-  time_t nowSecs = time(nullptr);
-  while (nowSecs < 8 * 3600 * 2) {
-    delay(500);
-    Serial.print(F("."));
-    yield();
-    nowSecs = time(nullptr);
-  }
-
-  Serial.println();
-  struct tm timeinfo;
-  gmtime_r(&nowSecs, &timeinfo);
-  Serial.print(F("Current time: "));
-  Serial.print(asctime(&timeinfo));
-}
-
-void fetchSegmentsFromPayload(const String& payload) {
-  const size_t capacity = 10 * 1024;  // Adjust if needed
-  DynamicJsonDocument doc(capacity);
-
-  DeserializationError error = deserializeJson(doc, payload);
-  if (error) {
-    Serial.print("deserializeJson() failed: ");
-    Serial.println(error.c_str());
-    return;
-  }
-
-  JsonObject segments = doc["segments"];
-
-  for (int i = 1; i <= 23; i++) {
-    String segName = "seg" + String(i);
-
-    if (segments.containsKey(segName)) {
-      int percentageComplete = segments[segName]["percentageComplete"];
-      bool isInverted = segments[segName]["isInverted"];
-
-      Serial.printf("%s - percentageComplete: %d, isInverted: %s\n",
-                    segName.c_str(), percentageComplete, isInverted ? "true" : "false");
-
-      // Save to segmentControls array
-      if (i - 1 < NUM_SEGMENTS) {  // Ensure we don't go out of bounds
-        segmentControls[i - 1].percentageComplete = percentageComplete;
-        segmentControls[i - 1].isInverted = isInverted;
+      Serial.print(F("Waiting for NTP time sync: "));
+      time_t nowSecs = time(nullptr);
+      while (nowSecs < 8 * 3600 * 2) {
+        delay(500);
+        Serial.print(F("."));
+        yield();
+        nowSecs = time(nullptr);
       }
 
-    } else {
-      Serial.printf("%s not found in segments.\n", segName.c_str());
-    }
-  }
+      Serial.println();
+      struct tm timeinfo;
+      gmtime_r(&nowSecs, &timeinfo);
+      Serial.print(F("Current time: "));
+      Serial.print(asctime(&timeinfo));
 }
 
-void makeRequest() {
+void HttpClient::fetchSegmentsFromPayload(const String& payload) {
+      const size_t capacity = 10 * 1024;  // Adjust if needed
+      DynamicJsonDocument doc(capacity);
+
+      DeserializationError error = deserializeJson(doc, payload);
+      if (error) {
+        Serial.print("deserializeJson() failed: ");
+        Serial.println(error.c_str());
+        return;
+      }
+
+      JsonObject segments = doc["segments"];
+
+      for (int i = 1; i <= 23; i++) {
+        String segName = "seg" + String(i);
+
+        if (segments.containsKey(segName)) {
+          int percentageComplete = segments[segName]["percentageComplete"];
+          bool isInverted = segments[segName]["isInverted"];
+
+          Serial.printf("%s - percentageComplete: %d, isInverted: %s\n",
+                        segName.c_str(), percentageComplete, isInverted ? "true" : "false");
+
+          // Save to segmentControls array
+          if (i - 1 < NUM_SEGMENTS) {  // Ensure we don't go out of bounds
+            segmentControls[i - 1].percentageComplete = percentageComplete;
+            segmentControls[i - 1].isInverted = isInverted;
+          }
+
+        } else {
+          Serial.printf("%s not found in segments.\n", segName.c_str());
+        }
+      }
+}
+
+void HttpClient::makeRequest() {
   unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis >= (interval * 60000)) {

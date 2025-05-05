@@ -9,9 +9,10 @@
 #define NUM_LEDS 189
 #define DATA_PIN 3
 
-// const int LED_PIN = 2;
 
 const uint8_t segmentLedIndices[NUM_SEGMENTS][10] = {
+
+
   { 0, 1, 2 },        // Segment 0 → LEDs 0, 1, 2
   { 5, 6, 7, 8, 9 },  // Segment 1 → LEDs 5, 6, 7, 8, 9
   { 10, 11, 12 },     // Segment 2 → LEDs 10, 11, 12
@@ -20,8 +21,10 @@ const uint8_t segmentLedIndices[NUM_SEGMENTS][10] = {
   { 19, 20, 21 },     // Segment 5 → LEDs 16, 17, 18                    // need to add more leds address
 };
 
-// Number of LEDs in each segment
+// // Number of LEDs in each segment
 const uint8_t segmentLedCount[NUM_SEGMENTS] = {
+
+
   3, 5, 3, 3, 3, 3
 };                                                                   // need to add leds in each segment
 
@@ -36,7 +39,15 @@ const CRGB segmentColors[NUM_SEGMENTS] = {
   // and so on for all NUM_SEGMENTS                                 // need to add color for each segments
 };
 
-void ledSetup();
-void runSegments();
+
+class LED{
+
+  public:
+
+    void ledSetup();
+    void runSegments();
+  
+
+};
 
 #endif  // LED_HPP

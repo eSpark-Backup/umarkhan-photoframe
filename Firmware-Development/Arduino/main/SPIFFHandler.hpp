@@ -7,7 +7,13 @@
 extern String htmlForm;
 extern String successPage;
 
-bool initSPIFFS();
-void loadHTMLFiles();
+
+
+class SPIFFHandler{
+    public:
+            bool initSPIFFS();
+            void loadHTMLFiles();
+
+};
 
 #endif
