@@ -5,8 +5,9 @@
 #include "WifiMonitoring.hpp"
 #include "httpClient.hpp"
 #include "LED.hpp"
+#include "config.hpp"
 
-// const int LED_PIN = 2;
+
 LED led;
 HttpClient httpclientt;
 SPIFFHandler spiff;
@@ -18,26 +19,55 @@ void setup() {
    
     // Setup Wi-Fi 
     webserver.setupWiFi();
-    webserver.createTask();
+    webserver.setupWebServer();
     // Initialize SPIFFS
     if (spiff.initSPIFFS()) {
         spiff.loadHTMLFiles();
     }
-   // WebServer
-    // Set LED pin as output
-    // pinMode(LED_PIN, OUTPUT);
+   
     httpclientt.httpsClock(); 
     led.ledSetup();   
+
+    xTaskCreate(webServerTask, "webServerTask", 4096, NULL, 1, NULL);
+    xTaskCreate(mainTask , "mainTask" , 4096 ,NULL , 2 , NULL);
+    xTaskCreate(httpRequestTask , "httpRequestTask" , 8192 , NULL , 2 , NULL );
+
 }
 
-void loop() {
-    // server.handleClient();
-    delay(100);
 
-    wifiMonitoring();
-    webserver.checkLEDStatus();
-    httpclientt.makeRequest();
-    led.runSegments();
+void mainTask( void * pvParameter){
+   
+        while(true){
+            vTaskDelay(pdMS_TO_TICKS(100));
 
-    printf("[loop] ledState: %d\n\r" , ledState);
+            wifiMonitoring();
+            webserver.checkLEDStatus();
+            led.runSegments();
+            printf("[loop] ledState: %d\n\r" , ledState);
+        }
+
 }
+
+void httpRequestTask(void * pvParameter){
+    vTaskDelay(pdMS_TO_TICKS(HTTP_REQ_INTERVAL_MS));
+    while(true){
+        httpclientt.makeRequest();
+        vTaskDelay(pdMS_TO_TICKS(HTTP_REQ_INTERVAL_MS));
+    }
+}
+
+void webServerTask(void * pvParameter){
+    while (true) {
+      webserver.clientloop();
+      vTaskDelay(10/ portTICK_PERIOD_MS);
+    }
+}
+
+
+
+void loop() {}
+
+
+
+
+

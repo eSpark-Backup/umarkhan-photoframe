@@ -43,7 +43,7 @@ void HttpClient::setClock() {
       Serial.print(F("Waiting for NTP time sync: "));
       time_t nowSecs = time(nullptr);
       while (nowSecs < 8 * 3600 * 2) {
-        delay(500);
+        vTaskDelay(pdMS_TO_TICKS(500));
         Serial.print(F("."));
         yield();
         nowSecs = time(nullptr);
@@ -92,10 +92,7 @@ void HttpClient::fetchSegmentsFromPayload(const String& payload) {
 }
 
 void HttpClient::makeRequest() {
-  unsigned long currentMillis = millis();
 
-  if (currentMillis - previousMillis >= (interval * 60000)) {
-    previousMillis = currentMillis;
 
     if (client) {
       client->setCACert(rootCACertificate);
@@ -124,5 +121,5 @@ void HttpClient::makeRequest() {
     } else {
       Serial.println("Unable to create client");
     }
-  }
+  
 }

@@ -45,7 +45,8 @@ void handleConnect() {
 
       int attempts = 0;
       while (WiFi.status() != WL_CONNECTED && attempts < WIFI_ATTEMPTS) {
-        delay(WIFI_ATTEMPTS_DURATION);
+        vTaskDelay(pdMS_TO_TICKS(WIFI_ATTEMPTS_DURATION));
+
         Serial.print(".");
         attempts++;
       }
@@ -158,7 +159,9 @@ void WebServerHandler::setupWiFi() {
 
         int attempts = 0;
         while (WiFi.status() != WL_CONNECTED && attempts < WIFI_ATTEMPTS) {
-          delay(WIFI_ATTEMPTS_DURATION);
+
+          vTaskDelay(pdMS_TO_TICKS(WIFI_ATTEMPTS_DURATION));
+
           Serial.print(".");
           attempts++;
         }
@@ -175,7 +178,7 @@ void WebServerHandler::setupWiFi() {
 
 // ---- Web Server Setup ----
 
-void setupWebServer() {
+void WebServerHandler::setupWebServer() {
       server.on("/", HTTP_GET, handleRoot);
       server.on("/connect", HTTP_POST, handleConnect);
       server.on("/sync_time", HTTP_POST, handleSyncTime);
@@ -186,14 +189,20 @@ void setupWebServer() {
 
 // ---- FreeRTOS Task to Handle Server ----
 
-void WebServerHandler::createTask() {
-       xTaskCreate(webServerTask, "webServerTask", 4096, NULL, 0, NULL);
-}
+// void WebServerHandler::createTask() {
+//        xTaskCreate(webServerTask, "webServerTask", 4096, NULL, 0, NULL);
+// }
 
-void webServerTask(void* pvParameters) {
-       setupWebServer();
-        while (true) {
+// void webServerTask(void* pvParameters) {
+//        setupWebServer();
+//         while (true) {
+//           server.handleClient();
+//           vTaskDelay(10 / portTICK_PERIOD_MS);
+//         }
+// }
+
+
+void WebServerHandler::clientloop(){
           server.handleClient();
-          vTaskDelay(10 / portTICK_PERIOD_MS);
-        }
+
 }

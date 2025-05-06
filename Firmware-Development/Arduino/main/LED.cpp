@@ -4,6 +4,7 @@ CRGB leds[NUM_LEDS];
 
 void LED::ledSetup() {
     FastLED.addLeds<WS2812B, DATA_PIN ,GRB>(leds, NUM_LEDS);  // GRB ordering is assumed
+    FastLED.clear();
 }
 
 void LED::runSegments() {

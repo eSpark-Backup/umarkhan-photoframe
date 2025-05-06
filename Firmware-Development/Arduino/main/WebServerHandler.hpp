@@ -6,12 +6,10 @@
 #include <WebServer.h>
 #include <Preferences.h>
 
-#define WIFI_DEBUG 1                /* WIFI_DEBUG = 1 -> enable the localIP*/ /*WIFI_DEBUG = 0 -> Disable the localIP*/ 
 
-#define ESP_AP_ID "ESP32_Config"
-#define ESP_AP_PWD "12345678"
-#define WIFI_ATTEMPTS 10
-#define WIFI_ATTEMPTS_DURATION 5000     // 5 sec
+#include "config.hpp"
+
+
 
 extern WebServer server;
 extern Preferences preferences;
@@ -23,8 +21,10 @@ class WebServerHandler{
 
     public:
         void setupWiFi();
-        void createTask();
-        void checkLEDStatus();
+        // void createTask();
+        void setupWebServer();
+        void checkLEDStatus();    
+        void clientloop();
 
     private:
         void startAccessPoint();

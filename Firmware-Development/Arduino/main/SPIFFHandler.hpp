@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
 
+
+#include "config.hpp"
+
 extern String htmlForm;
 extern String successPage;
 

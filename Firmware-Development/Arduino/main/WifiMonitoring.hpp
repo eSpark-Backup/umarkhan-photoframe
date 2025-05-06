@@ -3,6 +3,9 @@
 
 #include <WiFi.h>
 #include "WebServerHandler.hpp"
+
+#include "config.hpp"
+
 bool reconnecting = false;
 
 inline void wifiMonitoring() {
@@ -10,9 +13,12 @@ inline void wifiMonitoring() {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("Wifi Connection failed!");
     WiFi.disconnect();
-    delay(100);
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    
     WiFi.reconnect();
-    delay(100);
+    vTaskDelay(pdMS_TO_TICKS(100));
+
     reconnecting = false;
   } else {
     if (!reconnecting) {
