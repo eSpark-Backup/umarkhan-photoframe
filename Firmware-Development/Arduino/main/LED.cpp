@@ -3,7 +3,7 @@
 CRGB leds[NUM_LEDS];
 
 void LED::ledSetup() {
-    FastLED.addLeds<WS2812B, DATA_PIN ,GRB>(leds, NUM_LEDS);  // GRB ordering is assumed
+    FastLED.addLeds<WS2812B, LED_DATA_PIN ,GRB>(leds, NUM_LEDS);  // GRB ordering is assumed
     FastLED.clear();
 }
 
@@ -19,11 +19,15 @@ void LED::runSegments() {
         uint8_t pixelsToLight = (totalPixels * segmentControls[seg].percentageComplete) / 100;
         CRGB segmentColor = segmentColors[seg];  // Get color for this segment
 
-        Serial.print("Segment ");
-        Serial.print(seg);
-        Serial.print(": Lighting ");
-        Serial.print(pixelsToLight);
-        Serial.println(" pixels");
+        #ifdef LED_TEST_LOGS
+          Serial.print("Segment ");
+          Serial.print(seg);
+          Serial.print(": Lighting ");
+          Serial.print(pixelsToLight);
+          Serial.println(" pixels");
+
+        #endif //LED_TEST_LOGS
+
 
         for (uint8_t i = 0; i < totalPixels; i++) {
           uint8_t ledIndex = segmentLedIndices[seg][i];
@@ -37,8 +41,11 @@ void LED::runSegments() {
 
           if (shouldLight) {
             leds[ledIndex] = segmentColor;  // Light with SEGMENT COLOR
-            Serial.print("Lighting LED ");
-            Serial.println(ledIndex);
+             #ifdef LED_TEST_LOGS
+                Serial.print("Lighting LED ");
+                Serial.println(ledIndex);
+              #endif //LED_TEST_LOGS
+            
           } else {
             leds[ledIndex] = CRGB::Black;  // Turn OFF
             Serial.print("Turning OFF LED ");

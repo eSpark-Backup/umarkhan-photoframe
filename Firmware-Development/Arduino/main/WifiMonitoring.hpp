@@ -2,8 +2,8 @@
 #define WIFI_MONITORING_H
 
 #include <WiFi.h>
-#include "WebServerHandler.hpp"
 
+#include "WebServerHandler.hpp"
 #include "config.hpp"
 
 bool reconnecting = false;

@@ -8,6 +8,7 @@
 #include "config.hpp"
 
 
+
 LED led;
 HttpClient httpclientt;
 SPIFFHandler spiff;
@@ -43,7 +44,7 @@ void mainTask( void * pvParameter){
             wifiMonitoring();
             webserver.checkLEDStatus();
             led.runSegments();
-            printf("[loop] ledState: %d\n\r" , ledState);
+            // printf("[loop] ledState: %d\n\r" , ledState);
         }
 
 }
