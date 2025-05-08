@@ -87,6 +87,7 @@
     "memory": "cpp",
     "variant": "cpp",
     "set": "cpp",
-    "numeric": "cpp"
+    "numeric": "cpp",
+    "algorithm": "cpp"
   }
 }

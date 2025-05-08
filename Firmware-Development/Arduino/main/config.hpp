@@ -23,7 +23,10 @@
 #define WIFI_ATTEMPTS_DURATION 5000     // 5 sec
 
 
+//DISPLAY
 
+#define SCROLL_BOX_HEIGHT 200
+#define SCROLL_LINE_HEIGHT 20
 
 
 

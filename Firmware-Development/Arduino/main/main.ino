@@ -5,6 +5,7 @@
 #include "WifiMonitoring.hpp"
 #include "httpClient.hpp"
 #include "LED.hpp"
+#include "DisplayHandler.hpp"
 #include "config.hpp"
 
 
@@ -13,6 +14,7 @@ LED led;
 HttpClient httpclientt;
 SPIFFHandler spiff;
 WebServerHandler webserver;
+DisplayHandler displayhandle;
 
 void setup() {
     Serial.begin(115200);
@@ -28,6 +30,7 @@ void setup() {
    
     httpclientt.httpsClock(); 
     led.ledSetup();   
+    displayhandle.init();
 
     xTaskCreate(webServerTask, "webServerTask", 4096, NULL, 1, NULL);
     xTaskCreate(mainTask , "mainTask" , 4096 ,NULL , 2 , NULL);
@@ -44,6 +47,7 @@ void mainTask( void * pvParameter){
             wifiMonitoring();
             webserver.checkLEDStatus();
             led.runSegments();
+            displayhandle.loop();
             // printf("[loop] ledState: %d\n\r" , ledState);
         }
 
