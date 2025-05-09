@@ -8,7 +8,7 @@
 #include <time.h>
 
 #include "config.hpp"
-
+#include "httpClient.hpp"
 
 
 class DisplayHandler{

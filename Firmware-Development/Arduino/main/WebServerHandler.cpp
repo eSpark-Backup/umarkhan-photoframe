@@ -9,6 +9,7 @@
 
 WebServer server(80);
 Preferences preferences;
+String currentDateTime;
 
  bool ledState = false;
 
@@ -63,7 +64,7 @@ void handleConnect() {
 }
 
 void handleSyncTime() {
-      String currentDateTime = server.arg("datetime"); // Format: "2025-04-17T14:30"
+       currentDateTime = server.arg("datetime"); // Format: "2025-04-17T14:30"
 
       Serial.println("Received Time Sync Request:");
       Serial.println("Current DateTime: " + currentDateTime);

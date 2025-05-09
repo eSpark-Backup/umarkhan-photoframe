@@ -38,7 +38,7 @@ void setup() {
 
 }
 
-
+// String currentDateTime;
 void mainTask( void * pvParameter){
    
         while(true){
@@ -48,6 +48,7 @@ void mainTask( void * pvParameter){
             webserver.checkLEDStatus();
             led.runSegments();
             displayhandle.loop();
+            Serial.print("current date and time");Serial.println(currentDateTime);
             // printf("[loop] ledState: %d\n\r" , ledState);
         }
 

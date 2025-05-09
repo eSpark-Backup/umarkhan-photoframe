@@ -1,6 +1,7 @@
 #include "DisplayHandler.hpp"
 
 
+ResponseString animationText[NUM_SEGMENTS];
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -20,15 +21,15 @@ void DisplayHandler::init() {
         drawLayout();
 
         // Add some demo scroll text
-        for (int i = 1; i <= 10; i++) {
-            addLineToScrollBox("Message line #" + String(i));
-            delay(300);
+        for (int i = 0; i <= NUM_SEGMENTS-1; i++) {
+            addLineToScrollBox(animationText[i].responseLine);
+            vTaskDelay(pdMS_TO_TICKS(300));
         }
 }
 
 void DisplayHandler::loop() {
         updateTimeDisplay();
-        delay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
 }
 
 void DisplayHandler::drawLayout() {

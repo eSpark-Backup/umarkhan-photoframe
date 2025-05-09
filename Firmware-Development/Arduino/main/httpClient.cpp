@@ -1,4 +1,4 @@
-#include "HttpClient.hpp"
+#include "httpClient.hpp"
 #include <time.h>
 #include <ArduinoJson.h>
 
@@ -6,6 +6,9 @@
 NetworkClientSecure* client = new NetworkClientSecure;
 SegmentControl segmentControls[NUM_SEGMENTS];
 unsigned long previousMillis = 0;
+
+
+ResponseString respStr[NUM_SEGMENTS];
 
 
 
@@ -69,20 +72,35 @@ void HttpClient::fetchSegmentsFromPayload(const String& payload) {
 
       JsonObject segments = doc["segments"];
 
-      for (int i = 1; i <= 23; i++) {
-        String segName = "seg" + String(i);
+      for (int i = 0; i <= NUM_SEGMENTS-1; i++) {
+        String segName = "seg" + String(i+1);
 
         if (segments.containsKey(segName)) {
-          int percentageComplete = segments[segName]["percentageComplete"];
-          bool isInverted = segments[segName]["isInverted"];
 
-          Serial.printf("%s - percentageComplete: %d, isInverted: %s\n",
-                        segName.c_str(), percentageComplete, isInverted ? "true" : "false");
+          int percentageComplete = segments[segName]["percentageComplete"];
+          String percentage = String(percentageComplete);
+
+          bool isInverted = segments[segName]["isInverted"];
+          String inversion = isInverted ? "true" : "false";  
+
+
+
+          String segmentConfig = segName ;
+          segmentConfig.reserve(256);
+          segmentConfig +=" - percentageComplete: ";
+          segmentConfig += percentage ; 
+          segmentConfig += ", isInverted: ";
+          segmentConfig +=  inversion ;
+
+          respStr[i].responseLine = segmentConfig;
+          Serial.println(respStr[i].responseLine);
+          // Serial.printf("%s - percentageComplete: %d, isInverted: %s\n",
+          //               segName.c_str(), percentageComplete, isInverted ? "true" : "false");
 
           // Save to segmentControls array
-          if (i - 1 < NUM_SEGMENTS) {  // Ensure we don't go out of bounds
-            segmentControls[i - 1].percentageComplete = percentageComplete;
-            segmentControls[i - 1].isInverted = isInverted;
+          if (i < NUM_SEGMENTS) {  // Ensure we don't go out of bounds
+            segmentControls[i ].percentageComplete = percentageComplete;
+            segmentControls[i ].isInverted = isInverted;
           }
 
         } else {
@@ -90,6 +108,7 @@ void HttpClient::fetchSegmentsFromPayload(const String& payload) {
         }
       }
 }
+
 
 void HttpClient::makeRequest() {
 

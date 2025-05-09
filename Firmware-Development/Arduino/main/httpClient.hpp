@@ -22,6 +22,12 @@ struct SegmentControl {
 
 extern SegmentControl segmentControls[NUM_SEGMENTS];
 
+typedef struct {
+  String responseLine;
+}ResponseString;
+
+extern ResponseString respStr[NUM_SEGMENTS];
+
 
 class HttpClient{
 
