@@ -9,9 +9,9 @@
 
 WebServer server(80);
 Preferences preferences;
-String currentDateTime;
+time_t updatedTime ; // Actual definition and initialization
 
- bool ledState = false;
+bool ledState = false;
 
 struct Schedule {
       int onHour;
@@ -22,7 +22,6 @@ struct Schedule {
 Schedule ledSchedule = {0, 0, 0, 0};
 
 
-void webServerTask(void* pvParameters);
 
 // ---- Web Handlers ----
 
@@ -63,17 +62,17 @@ void handleConnect() {
       }
 }
 
-void handleSyncTime() {
+void handleSyncTime() { // Although the time is synced automatically the user can do it manually to
        currentDateTime = server.arg("datetime"); // Format: "2025-04-17T14:30"
-
+         esp_sntp_stop();
       Serial.println("Received Time Sync Request:");
       Serial.println("Current DateTime: " + currentDateTime);
       String responseMessage;
       if (currentDateTime.length() > 0) {
         struct tm tm;
         if (strptime(currentDateTime.c_str(), "%Y-%m-%dT%H:%M", &tm)) {
-          time_t t = mktime(&tm);
-          struct timeval now = { .tv_sec = t };
+          updatedTime = mktime(&tm); 
+          struct timeval now = { .tv_sec = updatedTime };
           settimeofday(&now, NULL);  
           Serial.println("System time updated successfully.");
           responseMessage = "<h2>System time updated successfully!</h2>";
@@ -120,18 +119,18 @@ void WebServerHandler::checkLEDStatus() {
         Serial.println("Failed to obtain time");
         return;
       }
+      // Serial.print("[WebServerHandler checkLEDStatus] time:"); Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 
       int currentHour = timeinfo.tm_hour;
       int currentMinute = timeinfo.tm_min;
 
+
       if (currentHour == ledSchedule.onHour && currentMinute == ledSchedule.onMinute && !ledState) {
-        // digitalWrite(LED_PIN, HIGH);
         ledState = true;
         Serial.println("LED Turned ON (Scheduled)");
       }
 
       if (currentHour == ledSchedule.offHour && currentMinute == ledSchedule.offMinute && ledState) {
-        // digitalWrite(LED_PIN, LOW);
         ledState = false;
         Serial.println("LED Turned OFF (Scheduled)");
       }
@@ -188,22 +187,18 @@ void WebServerHandler::setupWebServer() {
       Serial.println("HTTP server started");
 }
 
-// ---- FreeRTOS Task to Handle Server ----
-
-// void WebServerHandler::createTask() {
-//        xTaskCreate(webServerTask, "webServerTask", 4096, NULL, 0, NULL);
-// }
-
-// void webServerTask(void* pvParameters) {
-//        setupWebServer();
-//         while (true) {
-//           server.handleClient();
-//           vTaskDelay(10 / portTICK_PERIOD_MS);
-//         }
-// }
-
-
-void WebServerHandler::clientloop(){
-          server.handleClient();
-
+void WebServerHandler::init(){
+    setupWiFi();
+    setupWebServer();
 }
+
+void WebServerHandler::loop(){
+      checkLEDStatus();
+      server.handleClient();
+      
+}
+
+
+
+
+

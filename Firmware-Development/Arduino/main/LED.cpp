@@ -8,7 +8,7 @@ void LED::ledSetup() {
 }
 
 void LED::runSegments() {
-    Serial.println("Checking set time");
+    // Serial.println("Checking set time");
     if (ledState) {
       Serial.println("running LED segments");
       // digitalWrite(LED_PIN, HIGH);
@@ -56,7 +56,7 @@ void LED::runSegments() {
     }
     else {
       // digitalWrite(LED_PIN, LOW);
-      Serial.println("Out of Scheduled Time");
+      // Serial.println("Out of Scheduled Time");
     }
     FastLED.show();  // Update LEDs
 }

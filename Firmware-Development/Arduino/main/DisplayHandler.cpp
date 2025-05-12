@@ -2,7 +2,7 @@
 
 
 ResponseString animationText[NUM_SEGMENTS];
-
+// bool segmentConfigReceivedFlag;
 TFT_eSPI tft = TFT_eSPI();
 
 // Scroll box parameters
@@ -13,24 +13,31 @@ void DisplayHandler::init() {
         tft.init();
         tft.setRotation(1);
         tft.fillScreen(TFT_BLACK);
-
-        // Set timezone using environment variable style (change as needed)
-        configTzTime("PKT-5", "pool.ntp.org");  // Pakistan Standard Time (UTC+5)
-
         // Draw static layout
         drawLayout();
 
-        // Add some demo scroll text
-        for (int i = 0; i <= NUM_SEGMENTS-1; i++) {
-            addLineToScrollBox(animationText[i].responseLine);
-            vTaskDelay(pdMS_TO_TICKS(300));
-        }
 }
 
 void DisplayHandler::loop() {
         updateTimeDisplay();
+        if(segmentConfigReceivedFlag){
+                Serial.println("[ display handler: loop ] Updating Scroll Box ");
+                updateScrollBox();
+        }
             vTaskDelay(pdMS_TO_TICKS(1000));
 }
+
+void DisplayHandler::updateScrollBox(){
+        segmentConfigReceivedFlag= false;
+                // Add some demo scroll text
+        for (int i = 0; i <= NUM_SEGMENTS-1; i++) {
+            addLineToScrollBox(animationText[i].responseLine);
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
+}
+
+
+
 
 void DisplayHandler::drawLayout() {
         // Draw scroll box (top part of screen)
@@ -47,22 +54,29 @@ void DisplayHandler::drawLayout() {
 }
 
 void DisplayHandler::updateTimeDisplay() {
-        struct tm timeinfo;
+        // Display time
+         struct tm timeinfo;
         if (!getLocalTime(&timeinfo)) {
-            Serial.println("Failed to get time");
-            return;
+        Serial.println("Failed to obtain time");
+        return;
         }
 
-        char timeStr[9];
-        strftime(timeStr, sizeof(timeStr), "%H:%M:%S", &timeinfo);
+        // Format date and time (without timezone)
+        char dateTimeStr[64];
+        strftime(dateTimeStr, sizeof(dateTimeStr), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
-        char zoneStr[6];
-        strftime(zoneStr, sizeof(zoneStr), "%z", &timeinfo);  // +0500 format
+        // Format timezone only
+        char timeZoneStr[16];
+        strftime(timeZoneStr, sizeof(timeZoneStr), "%Z", &timeinfo);
 
-        // Display time
         tft.setTextColor(TFT_WHITE, TFT_DARKGREY);
-        tft.drawString(timeStr, 60, SCROLL_BOX_HEIGHT + 10, 2);
-        tft.drawString(zoneStr, tft.width() / 2 + 60, SCROLL_BOX_HEIGHT + 10, 2);
+        tft.drawString(dateTimeStr, 60, SCROLL_BOX_HEIGHT + 10, 2);
+        tft.drawString(timeZoneStr, tft.width() / 2  + 60, SCROLL_BOX_HEIGHT + 10, 2);
+        //   Serial.print("Date-Time: ");
+        // Serial.println(dateTimeStr);
+
+        // Serial.print("Time Zone: ");
+        // Serial.println(timeZoneStr);
 }
 
 void DisplayHandler::addLineToScrollBox(String line) {

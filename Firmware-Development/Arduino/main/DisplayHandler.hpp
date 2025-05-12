@@ -11,6 +11,7 @@
 #include "httpClient.hpp"
 
 
+
 class DisplayHandler{
 
     public:
@@ -21,7 +22,7 @@ class DisplayHandler{
         void drawLayout() ;
         void updateTimeDisplay() ;
         void addLineToScrollBox(String line) ;
-
+        void updateScrollBox();
 
 };
 

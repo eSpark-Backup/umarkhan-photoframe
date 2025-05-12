@@ -6,7 +6,9 @@
 NetworkClientSecure* client = new NetworkClientSecure;
 SegmentControl segmentControls[NUM_SEGMENTS];
 unsigned long previousMillis = 0;
-
+bool segmentConfigReceivedFlag = false;
+String currentDateTime;
+String currentTimeZone;
 
 ResponseString respStr[NUM_SEGMENTS];
 
@@ -36,28 +38,7 @@ vepuoxtGzi4CZ68zJpiq1UvSqTbFJjtbD4seiMHl
 -----END CERTIFICATE-----
 )EOF";
 
-void HttpClient::httpsClock() {
-  setClock();
-}
 
-void HttpClient::setClock() {
-      configTime(0, 0, "pool.ntp.org");
-
-      Serial.print(F("Waiting for NTP time sync: "));
-      time_t nowSecs = time(nullptr);
-      while (nowSecs < 8 * 3600 * 2) {
-        vTaskDelay(pdMS_TO_TICKS(500));
-        Serial.print(F("."));
-        yield();
-        nowSecs = time(nullptr);
-      }
-
-      Serial.println();
-      struct tm timeinfo;
-      gmtime_r(&nowSecs, &timeinfo);
-      Serial.print(F("Current time: "));
-      Serial.print(asctime(&timeinfo));
-}
 
 void HttpClient::fetchSegmentsFromPayload(const String& payload) {
       const size_t capacity = 10 * 1024;  // Adjust if needed
@@ -93,6 +74,8 @@ void HttpClient::fetchSegmentsFromPayload(const String& payload) {
           segmentConfig +=  inversion ;
 
           respStr[i].responseLine = segmentConfig;
+          segmentConfigReceivedFlag= true;
+
           Serial.println(respStr[i].responseLine);
           // Serial.printf("%s - percentageComplete: %d, isInverted: %s\n",
           //               segName.c_str(), percentageComplete, isInverted ? "true" : "false");

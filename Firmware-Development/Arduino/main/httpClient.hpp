@@ -9,12 +9,12 @@
 #include "config.hpp"
 
 
-// const char* URL = "https://api-database-updater.ftled.workers.dev/" ;
 
 static const char* URL = "https://api-database-updater.ftled.workers.dev/" ;
 
-// const unsigned long interval = INTERVAL_MIN; // 60,000 milliseconds = 1 minute
-
+extern bool segmentConfigReceivedFlag;
+extern String currentDateTime;
+extern String currentTimeZone;
 struct SegmentControl {
   uint8_t percentageComplete =100 ;  // 0-100
   bool isInverted = false;
@@ -32,9 +32,7 @@ extern ResponseString respStr[NUM_SEGMENTS];
 class HttpClient{
 
   public:
-      void httpsClock();
       void makeRequest();
-      void setClock();
 
   private:
       void fetchSegmentsFromPayload(const String& payload);

@@ -6,8 +6,12 @@
 #include <WebServer.h>
 #include <Preferences.h>
 
+#include "httpClient.hpp"
+#include "TimeHandler.hpp"
+#include "esp_sntp.h"
 
 #include "config.hpp"
+
 
 
 
@@ -15,20 +19,19 @@ extern WebServer server;
 extern Preferences preferences;
 // const char* htmlForm;
 extern bool ledState;
-extern String currentDateTime;
+
 
 class WebServerHandler{
 
     public:
-        void setupWiFi();
-        // void createTask();
-        void setupWebServer();
-        void checkLEDStatus();    
-        void clientloop();
+        void init();
+        void loop();
 
     private:
+        void checkLEDStatus();    
         void startAccessPoint();
-
+        void setupWiFi();
+        void setupWebServer();
 
 
         // void handleLEDControl();

@@ -6,6 +6,7 @@
 #include "httpClient.hpp"
 #include "LED.hpp"
 #include "DisplayHandler.hpp"
+#include "TimeHandler.hpp"
 #include "config.hpp"
 
 
@@ -15,20 +16,21 @@ HttpClient httpclientt;
 SPIFFHandler spiff;
 WebServerHandler webserver;
 DisplayHandler displayhandle;
+TimeHandler timehandle;
 
 void setup() {
     Serial.begin(115200);
     delay(1000);
    
     // Setup Wi-Fi 
-    webserver.setupWiFi();
-    webserver.setupWebServer();
+    webserver.init();
+    timehandle.init();
+
     // Initialize SPIFFS
     if (spiff.initSPIFFS()) {
         spiff.loadHTMLFiles();
     }
    
-    httpclientt.httpsClock(); 
     led.ledSetup();   
     displayhandle.init();
 
@@ -38,20 +40,16 @@ void setup() {
 
 }
 
-// String currentDateTime;
 void mainTask( void * pvParameter){
    
         while(true){
             vTaskDelay(pdMS_TO_TICKS(100));
-
             wifiMonitoring();
-            webserver.checkLEDStatus();
             led.runSegments();
             displayhandle.loop();
-            Serial.print("current date and time");Serial.println(currentDateTime);
-            // printf("[loop] ledState: %d\n\r" , ledState);
+            timehandle.loop();
+          
         }
-
 }
 
 void httpRequestTask(void * pvParameter){
@@ -64,7 +62,7 @@ void httpRequestTask(void * pvParameter){
 
 void webServerTask(void * pvParameter){
     while (true) {
-      webserver.clientloop();
+      webserver.loop();
       vTaskDelay(10/ portTICK_PERIOD_MS);
     }
 }
