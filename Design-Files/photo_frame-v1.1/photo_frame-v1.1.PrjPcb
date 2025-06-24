@@ -203,7 +203,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document10]
-DocumentPath=Deliverables\Gerber Files\Gerber.Cam
+DocumentPath=Deliverables\Gerber Files\Gerber File.Cam
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
